@@ -1,0 +1,66 @@
+<!DOCTYPE html> <!-- indique au navigateur qu'on utilise HTML5 -->
+<html lang="fr"> <!-- ouvre le document HTML et précise que la langue est le français -->
+<head> <!-- ouvre la partie de configuration invisible de la page -->
+  <meta charset="UTF-8"> <!-- permet d'afficher correctement les accents et caractères spéciaux -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- rend la page adaptée aux écrans de téléphone -->
+  <title>Mon Système</title> <!-- titre affiché dans l'onglet du navigateur -->
+  <link rel="stylesheet" href="style.css"> <!-- relie ce fichier HTML au fichier CSS -->
+</head> <!-- ferme la partie head -->
+<body> <!-- ouvre la partie visible de la page -->
+
+
+  <div id="app"> <!-- conteneur principal qui regroupe toute l'application -->
+    <h1>Mon Système</h1> <!-- grand titre principal affiché en haut de la page -->
+    
+    <div id="home"> <!-- écran d'accueil visible par défaut -->
+      <h2>MAINTENANT</h2> <!-- titre de la section de tâche actuelle -->
+      <p id="nowTask"></p> <!-- zone où JavaScript affichera la tâche actuelle -->
+      <button onclick="completeTask()">Terminé</button> <!-- bouton qui marque la tâche actuelle comme terminée -->
+
+      <h2>MODES</h2> <!-- titre de la section des modes -->
+      <button onclick="showMode('wake')">Réveil</button> <!-- bouton qui ouvre le mode réveil -->
+      <button onclick="showMode('work')">Travail</button> <!-- bouton qui ouvre le mode travail -->
+      <button onclick="showMode('speech')">Parole</button> <!-- bouton qui ouvre le mode parole -->
+    </div> <!-- fin de l'écran d'accueil -->
+
+    <div id="wake" class="hidden"> <!-- écran réveil caché au départ -->
+      <h2>MODE RÉVEIL</h2> <!-- titre du mode réveil -->
+
+      <label><input type="checkbox" onchange="save()"> Je suis réveillée</label><br> <!-- case à cocher réveillée -->
+      <label><input type="checkbox" onchange="save()"> Je me suis levée</label><br> <!-- case à cocher levée -->
+      <label><input type="checkbox" onchange="save()"> Eau</label><br> <!-- case à cocher eau -->
+      <label><input type="checkbox" onchange="save()"> Musique</label><br> <!-- case à cocher musique -->
+
+      <button onclick="goHome()">Retour</button> <!-- bouton pour revenir à l'accueil -->
+    </div> <!-- fin de l'écran réveil -->
+
+    <div id="work" class="hidden"> <!-- écran travail caché au départ -->
+      <h2>MODE TRAVAIL</h2> <!-- titre du mode travail -->
+
+      <p id="workTask"></p> <!-- zone où JavaScript affichera la tâche du mode travail -->
+      <button onclick="startTimer()">Lancer 25 min</button> <!-- bouton qui démarre le timer de 25 minutes -->
+      <button onclick="stopTimer()">Arrêter</button> <!-- bouton qui arrête le timer sans le remettre à zéro -->
+      <button onclick="resetTimer()">Recommencer</button> <!-- bouton qui remet le timer à 25 minutes -->
+      <p id="timer"></p> <!-- zone où JavaScript affichera le temps restant -->
+
+      <button onclick="goHome()">Retour</button> <!-- bouton pour revenir à l'accueil -->
+    </div> <!-- fin de l'écran travail -->
+
+    <div id="speech" class="hidden"> <!-- écran parole caché au départ -->
+      <h2>MODE PAROLE</h2> <!-- titre du mode parole -->
+
+      <p id="speechText"></p> <!-- zone où JavaScript affichera le texte à lire à voix haute -->
+      <button onclick="startSpeech()">Commencer (5 min)</button> <!-- bouton qui démarre le timer de parole -->
+      <button onclick="stopSpeech()">Arrêter</button> <!-- bouton qui arrête le timer parole sans remise à zéro -->
+      <button onclick="resetSpeech()">Recommencer</button> <!-- bouton qui remet le timer parole à 5 minutes -->
+      <button onclick="nextSpeech()">Changer de texte</button> <!-- bouton qui passe au texte suivant -->
+      <p id="speechTimer"></p> <!-- zone où JavaScript affichera le temps restant du mode parole -->
+
+      <button onclick="goHome()">Retour</button> <!-- bouton pour revenir à l'accueil -->
+    </div> <!-- fin de l'écran parole -->
+
+  </div> <!-- fin du conteneur principal de l'application -->
+
+  <script src="app.js"></script> <!-- charge le fichier JavaScript à la fin pour que le HTML soit déjà présent -->
+</body> <!-- ferme la partie visible de la page -->
+</html> <!-- ferme le document HTML -->

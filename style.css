@@ -1,0 +1,135 @@
+* { /* sélectionne tous les éléments de la page */
+  box-sizing: border-box; /* fait en sorte que padding et border soient inclus dans la largeur/hauteur */
+} /* fin de la règle universelle */
+
+body { /* cible tout le corps visible de la page */
+  margin: 0; /* supprime les marges par défaut du navigateur */
+  padding: 0; /* supprime les espacements internes par défaut */
+  font-family: Arial, sans-serif; /* définit une police simple et lisible */
+  background: #f4f4f4; /* donne un fond gris très clair à la page */
+  color: #111; /* donne une couleur de texte presque noire */
+  min-height: 100vh; /* force la hauteur minimale à prendre tout l’écran */
+  display: flex; /* active Flexbox pour centrer le contenu */
+  justify-content: center; /* centre horizontalement le contenu */
+  align-items: flex-start; /* aligne le contenu en haut de l’écran */
+  padding: 16px; /* ajoute un espace autour du contenu */
+} /* fin de la règle body */
+
+#app { /* cible le conteneur principal de l’application */
+  width: 100%; /* prend toute la largeur disponible */
+  max-width: 420px; /* limite la largeur pour garder un bon rendu sur mobile */
+} /* fin de la règle #app */
+
+h1 { /* cible le grand titre principal */
+  text-align: center; /* centre le texte */
+  font-size: 2.4rem; /* agrandit fortement la taille du titre */
+  margin: 0 0 24px 0; /* ajoute un espace sous le titre */
+  font-weight: 700; /* rend le titre bien gras */
+} /* fin de la règle h1 */
+
+h2 { /* cible les sous-titres des écrans */
+  text-align: center; /* centre le texte */
+  font-size: 1.9rem; /* met une taille bien visible sur mobile */
+  margin: 0 0 24px 0; /* ajoute un espace sous le sous-titre */
+  font-weight: 700; /* rend le sous-titre bien gras */
+} /* fin de la règle h2 */
+
+#home,
+#wake,
+#work,
+#speech { /* cible chacun des écrans de l’application */
+  background: #ffffff; /* met un fond blanc pour faire une vraie carte */
+  border-radius: 20px; /* arrondit les coins pour un aspect plus moderne */
+  padding: 24px 18px; /* ajoute un bon espace intérieur */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); /* ajoute une ombre légère pour détacher la carte du fond */
+} /* fin de la règle des écrans */
+
+p { /* cible tous les paragraphes */
+  text-align: center; /* centre le texte */
+  font-size: 1.25rem; /* augmente la taille pour que ce soit lisible sur téléphone */
+  line-height: 1.5; /* améliore la lisibilité verticale */
+  margin: 12px 0 20px 0; /* ajoute des espacements autour */
+  word-break: break-word; /* coupe les mots trop longs si nécessaire */
+} /* fin de la règle p */
+
+button { /* cible tous les boutons */
+  display: block; /* force le bouton à être sur sa propre ligne */
+  width: 100%; /* rend le bouton large et facile à toucher */
+  min-height: 56px; /* garantit une bonne hauteur tactile pour le doigt */
+  margin: 12px 0; /* ajoute de l’espace entre les boutons */
+  padding: 14px 16px; /* ajoute du confort visuel à l’intérieur du bouton */
+  font-size: 1.2rem; /* augmente le texte des boutons */
+  font-weight: 600; /* rend le texte légèrement gras */
+  border: none; /* enlève la bordure par défaut */
+  border-radius: 14px; /* arrondit les boutons */
+  background: #111; /* met un fond noir élégant */
+  color: #fff; /* met le texte en blanc */
+  cursor: pointer; /* montre un curseur cliquable sur ordinateur */
+  transition: transform 0.1s ease, opacity 0.2s ease; /* ajoute une petite animation fluide */
+} /* fin de la règle button */
+
+button:active { /* cible le bouton quand on appuie dessus */
+  transform: scale(0.98); /* réduit légèrement le bouton pour donner un effet tactile */
+} /* fin de la règle button:active */
+
+button:hover { /* cible le bouton au survol sur ordinateur */
+  opacity: 0.92; /* baisse légèrement l’opacité pour un effet discret */
+} /* fin de la règle button:hover */
+
+label { /* cible les lignes de checklist */
+  display: flex; /* aligne la case et le texte sur la même ligne */
+  align-items: center; /* centre verticalement la case et le texte */
+  gap: 12px; /* ajoute un espace entre la case et le texte */
+  font-size: 1.35rem; /* augmente la taille du texte des checklists */
+  margin: 14px 0; /* ajoute de l’espace entre les lignes */
+  line-height: 1.4; /* améliore la lisibilité */
+} /* fin de la règle label */
+
+input[type="checkbox"] { /* cible les cases à cocher */
+  width: 24px; /* agrandit la largeur de la case */
+  height: 24px; /* agrandit la hauteur de la case */
+  flex-shrink: 0; /* empêche la case de rétrécir */
+} /* fin de la règle checkbox */
+
+.hidden { /* cible les éléments qui doivent être cachés */
+  display: none; /* cache complètement l’élément */
+} /* fin de la règle hidden */
+
+#timer,
+#speechTimer { /* cible les zones d’affichage des minuteurs */
+  font-size: 2rem; /* agrandit fortement le temps affiché */
+  font-weight: 700; /* rend le texte bien visible */
+  text-align: center; /* centre le minuteur */
+  margin: 20px 0; /* ajoute de l’espace autour */
+  min-height: 48px; /* réserve de la place même quand le texte n’est pas encore affiché */
+} /* fin de la règle des timers */
+
+#nowTask,
+#workTask,
+#speechText { /* cible les textes dynamiques principaux */
+  background: #f8f8f8; /* ajoute un fond gris clair pour mieux distinguer la zone */
+  border-radius: 14px; /* arrondit la zone */
+  padding: 16px; /* ajoute de l’espace intérieur */
+} /* fin de la règle des textes dynamiques */
+
+br { /* cible les sauts de ligne HTML */
+  display: none; /* masque les <br> pour éviter des espacements bizarres avec le layout mobile */
+} /* fin de la règle br */
+
+@media (min-width: 768px) { /* applique des styles spéciaux sur tablette ou ordinateur */
+  body { /* recible le body pour les écrans plus grands */
+    padding: 32px; /* ajoute plus d’espace autour sur grand écran */
+  } /* fin de la règle body desktop */
+
+  h1 { /* recible le titre principal */
+    font-size: 3rem; /* agrandit encore un peu le titre sur grand écran */
+  } /* fin de la règle h1 desktop */
+
+  h2 { /* recible les sous-titres */
+    font-size: 2.2rem; /* agrandit les sous-titres sur grand écran */
+  } /* fin de la règle h2 desktop */
+
+  button { /* recible les boutons */
+    font-size: 1.15rem; /* ajuste légèrement la taille du texte des boutons */
+  } /* fin de la règle button desktop */
+} /* fin de la media query */
