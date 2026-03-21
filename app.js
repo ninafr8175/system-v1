@@ -1,5 +1,5 @@
 let state = { // objet principal qui stocke les données de l'application
-  nowTask: "Commencer le système", // texte affiché dans la zone MAINTENANT
+  nowTask: "Aucune tâche en cours", // texte affiché dans la zone MAINTENANT
   speechIndex: 0, // index du texte actuel dans le mode parole
   workTask: "Faire 1 tâche simple" // texte affiché dans le mode travail
 }; // fin de l'objet state
@@ -34,23 +34,42 @@ function updateUI() { // fonction qui met à jour les textes affichés dans l'in
   document.getElementById("speechText").innerText = speechTexts[state.speechIndex] || speechTexts[0]; // affiche le texte courant du mode parole ou le premier si l'index est invalide
 } // fin de la fonction updateUI
 
-function showMode(mode) { // fonction qui affiche un seul écran et cache tous les autres
-  document.getElementById("home").classList.add("hidden"); // cache l'écran d'accueil
-  document.getElementById("wake").classList.add("hidden"); // cache l'écran réveil
-  document.getElementById("work").classList.add("hidden"); // cache l'écran travail
-  document.getElementById("speech").classList.add("hidden"); // cache l'écran parole
-  document.getElementById(mode).classList.remove("hidden"); // affiche seulement l'écran demandé
-} // fin de la fonction showMode
+function showMode(mode) { // affiche un mode et met à jour la tâche actuelle
+
+  document.getElementById("home").classList.add("hidden"); // cache accueil
+  document.getElementById("wake").classList.add("hidden"); // cache réveil
+  document.getElementById("work").classList.add("hidden"); // cache travail
+  document.getElementById("speech").classList.add("hidden"); // cache parole
+
+  document.getElementById(mode).classList.remove("hidden"); // affiche le mode demandé
+
+  // 🔥 logique métier : définir la tâche actuelle automatiquement
+
+  if (mode === "work") { // si on entre en mode travail
+    state.nowTask = state.workTask; // la tâche devient la tâche de travail
+  }
+
+  if (mode === "speech") { // si on entre en mode parole
+    state.nowTask = "Faire 5 min de parole"; // tâche parole simple
+  }
+
+  if (mode === "wake") { // si on entre en mode réveil
+    state.nowTask = "Routine réveil"; // tâche réveil
+  }
+
+  save(); // sauvegarde l’état
+  updateUI(); // met à jour l’écran
+}
 
 function goHome() { // fonction qui ramène à l'écran d'accueil
   showMode("home"); // affiche l'écran home
 } // fin de la fonction goHome
 
-function completeTask() { // fonction appelée quand on clique sur Terminé dans MAINTENANT
-  state.nowTask = "Choisir une nouvelle tâche"; // remplace la tâche actuelle par un nouveau texte simple
-  save(); // sauvegarde le nouvel état
-  updateUI(); // rafraîchit l'affichage
-} // fin de la fonction completeTask
+function completeTask() { // marque la tâche actuelle comme terminée
+  state.nowTask = "Aucune tâche en cours"; // remet à une valeur vide utile
+  save(); // sauvegarde l’état
+  updateUI(); // met à jour l’affichage
+}
 
 function startTimer() { // fonction qui démarre le timer du mode travail
   if (workInterval) { // vérifie si un timer travail tourne déjà
