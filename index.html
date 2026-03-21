@@ -1,66 +1,67 @@
 <!DOCTYPE html> <!-- indique au navigateur qu'on utilise HTML5 -->
-<html lang="fr"> <!-- ouvre le document HTML et précise que la langue est le français -->
+<html lang="fr"> <!-- ouvre le document HTML et précise que la langue principale est le français -->
 <head> <!-- ouvre la partie de configuration invisible de la page -->
   <meta charset="UTF-8"> <!-- permet d'afficher correctement les accents et caractères spéciaux -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- rend la page adaptée aux écrans de téléphone -->
-  <title>Mon Système</title> <!-- titre affiché dans l'onglet du navigateur -->
-  <link rel="stylesheet" href="style.css"> <!-- relie ce fichier HTML au fichier CSS -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- adapte la page aux écrans de téléphone -->
+  <title>Mon Système</title> <!-- définit le titre affiché dans l'onglet du navigateur -->
+  <link rel="stylesheet" href="style.css"> <!-- relie la page au fichier CSS -->
 </head> <!-- ferme la partie head -->
 <body> <!-- ouvre la partie visible de la page -->
 
-
-  <div id="app"> <!-- conteneur principal qui regroupe toute l'application -->
-    <h1>Mon Système</h1> <!-- grand titre principal affiché en haut de la page -->
+  <div id="app"> <!-- conteneur principal de toute l'application -->
+    <h1>Mon Système</h1> <!-- titre principal affiché en haut de l'application -->
 
     <div id="home"> <!-- écran d'accueil visible par défaut -->
-      <h2>MAINTENANT</h2> <!-- titre de la section de tâche actuelle -->
-      <p id="nowTask"></p> <!-- zone où JavaScript affichera la tâche actuelle -->
-      <button onclick="completeTask()">Marquer comme fait</button> <!-- bouton qui marque la tâche actuelle comme terminée -->
+      <h2>MAINTENANT</h2> <!-- titre de la section qui affiche l'action en cours -->
+      <p id="nowTask"></p> <!-- zone où JavaScript affichera la tâche ou le mode actif -->
+      <p id="statusMessage"></p> <!-- zone où JavaScript affichera un message court d'information ou de blocage -->
 
-      <h2>MODES</h2> <!-- titre de la section des modes -->
-      <button onclick="showMode('wake')">Réveil</button> <!-- bouton qui ouvre le mode réveil -->
-      <button onclick="showMode('work')">Travail</button> <!-- bouton qui ouvre le mode travail -->
-      <button onclick="showMode('speech')">Parole</button> <!-- bouton qui ouvre le mode parole -->
-    </div> <!-- fin de l'écran d'accueil -->
+      <h2>MODES</h2> <!-- titre de la section contenant les boutons des modes -->
+      <button onclick="showMode('wake')">Réveil</button> <!-- bouton qui tente d'ouvrir le mode réveil -->
+      <button onclick="showMode('work')">Travail</button> <!-- bouton qui tente d'ouvrir le mode travail -->
+      <button onclick="showMode('speech')">Parole</button> <!-- bouton qui tente d'ouvrir le mode parole -->
+    </div> <!-- ferme l'écran d'accueil -->
 
     <div id="wake" class="hidden"> <!-- écran réveil caché au départ -->
       <h2>MODE RÉVEIL</h2> <!-- titre du mode réveil -->
 
-      <label><input type="checkbox" onchange="save()"> Je suis réveillée</label><br> <!-- case à cocher réveillée -->
-      <label><input type="checkbox" onchange="save()"> Je me suis levée</label><br> <!-- case à cocher levée -->
-      <label><input type="checkbox" onchange="save()"> Eau</label><br> <!-- case à cocher eau -->
-      <label><input type="checkbox" onchange="save()"> Musique</label><br> <!-- case à cocher musique -->
+      <label><input id="wakeAwake" type="checkbox" onchange="saveWakeProgress()"> Je suis réveillée</label> <!-- case 1 du réveil -->
+      <label><input id="wakeUp" type="checkbox" onchange="saveWakeProgress()"> Je me suis levée</label> <!-- case 2 du réveil -->
+      <label><input id="wakeWater" type="checkbox" onchange="saveWakeProgress()"> Eau</label> <!-- case 3 du réveil -->
+      <label><input id="wakeMusic" type="checkbox" onchange="saveWakeProgress()"> Musique</label> <!-- case 4 du réveil -->
 
-      <button onclick="goHome()">Retour</button> <!-- bouton pour revenir à l'accueil -->
-    </div> <!-- fin de l'écran réveil -->
+      <button onclick="completeWakeMode()">Terminer le mode</button> <!-- bouton qui termine le mode réveil si toutes les cases sont cochées -->
+      <button onclick="goHome()">Retour</button> <!-- bouton qui revient à l'accueil sans terminer le mode -->
+    </div> <!-- ferme l'écran réveil -->
 
     <div id="work" class="hidden"> <!-- écran travail caché au départ -->
       <h2>MODE TRAVAIL</h2> <!-- titre du mode travail -->
 
       <p id="workTask"></p> <!-- zone où JavaScript affichera la tâche du mode travail -->
-      <button onclick="startTimer()">Lancer 25 min</button> <!-- bouton qui démarre le timer de 25 minutes -->
-      <button onclick="stopTimer()">Arrêter</button> <!-- bouton qui arrête le timer sans le remettre à zéro -->
-      <button onclick="resetTimer()">Recommencer</button> <!-- bouton qui remet le timer à 25 minutes -->
-      <p id="timer"></p> <!-- zone où JavaScript affichera le temps restant -->
+      <button onclick="startTimer()">Lancer 25 min</button> <!-- bouton qui démarre le timer travail -->
+      <button onclick="stopTimer()">Arrêter</button> <!-- bouton qui arrête le timer travail -->
+      <button onclick="resetTimer()">Recommencer</button> <!-- bouton qui remet le timer travail à zéro -->
+      <p id="timer"></p> <!-- zone où JavaScript affichera le temps restant du mode travail -->
 
-      <button onclick="goHome()">Retour</button> <!-- bouton pour revenir à l'accueil -->
-    </div> <!-- fin de l'écran travail -->
+      <button onclick="completeWorkMode()">Terminer le mode</button> <!-- bouton qui termine le mode travail -->
+      <button onclick="goHome()">Retour</button> <!-- bouton qui revient à l'accueil sans terminer le mode -->
+    </div> <!-- ferme l'écran travail -->
 
     <div id="speech" class="hidden"> <!-- écran parole caché au départ -->
       <h2>MODE PAROLE</h2> <!-- titre du mode parole -->
 
       <p id="speechText"></p> <!-- zone où JavaScript affichera le texte à lire à voix haute -->
-      <button onclick="startSpeech()">Commencer (5 min)</button> <!-- bouton qui démarre le timer de parole -->
-      <button onclick="stopSpeech()">Arrêter</button> <!-- bouton qui arrête le timer parole sans remise à zéro -->
-      <button onclick="resetSpeech()">Recommencer</button> <!-- bouton qui remet le timer parole à 5 minutes -->
-      <button onclick="nextSpeech()">Changer de texte</button> <!-- bouton qui passe au texte suivant -->
+      <button onclick="startSpeech()">Commencer (5 min)</button> <!-- bouton qui démarre le timer parole -->
+      <button onclick="stopSpeech()">Arrêter</button> <!-- bouton qui arrête le timer parole -->
+      <button onclick="resetSpeech()">Recommencer</button> <!-- bouton qui remet le timer parole à zéro -->
+      <button onclick="nextSpeech()">Changer de texte</button> <!-- bouton qui affiche le texte suivant -->
       <p id="speechTimer"></p> <!-- zone où JavaScript affichera le temps restant du mode parole -->
 
-      <button onclick="goHome()">Retour</button> <!-- bouton pour revenir à l'accueil -->
-    </div> <!-- fin de l'écran parole -->
+      <button onclick="completeSpeechMode()">Terminer le mode</button> <!-- bouton qui termine le mode parole -->
+      <button onclick="goHome()">Retour</button> <!-- bouton qui revient à l'accueil sans terminer le mode -->
+    </div> <!-- ferme l'écran parole -->
+  </div> <!-- ferme le conteneur principal -->
 
-  </div> <!-- fin du conteneur principal de l'application -->
-
-  <script src="app.js"></script> <!-- charge le fichier JavaScript à la fin pour que le HTML soit déjà présent -->
-</body> <!-- ferme la partie visible de la page -->
+  <script src="app.js"></script> <!-- charge le fichier JavaScript à la fin pour que le HTML existe déjà -->
+</body> <!-- ferme la partie visible -->
 </html> <!-- ferme le document HTML -->
