@@ -30,6 +30,11 @@
       <label><input id="wakeWater" type="checkbox" onchange="saveWakeProgress()"> Eau</label> <!-- case 3 du réveil -->
       <label><input id="wakeMusic" type="checkbox" onchange="saveWakeProgress()"> Musique</label> <!-- case 4 du réveil -->
 
+      <p id="wakeMusicLinkLabel">Lien musique réveil</p> <!-- petit titre pour la zone de lien musique -->
+      <input id="wakeMusicLinkInput" type="url" placeholder="Colle ici un lien YouTube ou Spotify"> <!-- champ dans lequel tu colles ton lien musique -->
+      <button onclick="saveWakeMusicLink()">Enregistrer le lien</button> <!-- bouton qui sauvegarde le lien musique dans le navigateur -->
+      <button onclick="openWakeMusicLink()">Ouvrir ma musique</button> <!-- bouton qui ouvre le lien musique enregistré -->
+
       <button onclick="completeWakeMode()">Terminer le mode</button> <!-- bouton qui termine le mode réveil si toutes les cases sont cochées -->
       <button onclick="goHome()">Retour</button> <!-- bouton qui revient à l'accueil sans terminer le mode -->
     </div> <!-- ferme l'écran réveil -->
