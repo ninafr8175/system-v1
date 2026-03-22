@@ -1,7 +1,8 @@
 let state = { // objet principal qui stocke l'état global de l'application
   activeMode: "none", // mode actuellement actif : "none", "wake", "work" ou "speech"
   nowTask: "Aucune tâche en cours", // texte affiché dans la zone MAINTENANT sur l'accueil
-  statusMessage: "", // petit message d'information affiché sous MAINTENANT
+  statusMessage: "", // petit message d'information affiché sur l'accueil
+  wakeModeMessage: "", // petit message affiché directement dans l'écran réveil
   workTask: "Faire 1 tâche simple", // tâche affichée dans le mode travail
   speechIndex: 0, // index du texte actuel dans le tableau des textes parole
   wakeMusicLink: "", // lien musique personnalisé pour le mode réveil, stocké localement dans le navigateur
@@ -31,7 +32,7 @@ function load() { // charge les données sauvegardées au démarrage de l'applic
   if (saved) { // vérifie si une sauvegarde existe
     let parsed = JSON.parse(saved); // transforme le texte JSON en objet JavaScript
     state = { ...state, ...parsed }; // fusionne les valeurs par défaut avec les anciennes données sauvegardées
-    state.wakeProgress = { ...state.wakeProgress, ...(parsed.wakeProgress || {}) }; // fusionne aussi proprement les cases du réveil
+    state.wakeProgress = { ...state.wakeProgress, ...(parsed.wakeProgress || {}) }; // fusionne proprement les cases du réveil
   } // fin du bloc if
   updateUI(); // met l'interface à jour après chargement
 } // fin de la fonction load
@@ -43,19 +44,20 @@ function save() { // sauvegarde l'état actuel dans le navigateur
 function updateUI() { // met à jour tous les éléments visibles de l'interface
   document.getElementById("nowTask").innerText = state.nowTask; // affiche la tâche actuelle sur l'accueil
   document.getElementById("statusMessage").innerText = state.statusMessage; // affiche le message d'information sur l'accueil
+  document.getElementById("wakeModeMessage").innerText = state.wakeModeMessage; // affiche le message directement dans le mode réveil
   document.getElementById("workTask").innerText = state.workTask; // affiche la tâche de travail dans le mode travail
   document.getElementById("speechText").innerText = speechTexts[state.speechIndex] || speechTexts[0]; // affiche le texte courant du mode parole
-  document.getElementById("wakeAwake").checked = state.wakeProgress.awake; // coche ou décoche la case 1 du réveil selon l'état sauvegardé
-  document.getElementById("wakeUp").checked = state.wakeProgress.up; // coche ou décoche la case 2 du réveil selon l'état sauvegardé
-  document.getElementById("wakeWater").checked = state.wakeProgress.water; // coche ou décoche la case 3 du réveil selon l'état sauvegardé
-  document.getElementById("wakeMusic").checked = state.wakeProgress.music; // coche ou décoche la case 4 du réveil selon l'état sauvegardé
+  document.getElementById("wakeAwake").checked = state.wakeProgress.awake; // coche ou décoche la case 1 du réveil
+  document.getElementById("wakeUp").checked = state.wakeProgress.up; // coche ou décoche la case 2 du réveil
+  document.getElementById("wakeWater").checked = state.wakeProgress.water; // coche ou décoche la case 3 du réveil
+  document.getElementById("wakeMusic").checked = state.wakeProgress.music; // coche ou décoche la case 4 du réveil
   document.getElementById("wakeMusicLinkInput").value = state.wakeMusicLink; // affiche dans le champ le lien musique actuellement sauvegardé
 
-  if (document.getElementById("timer").innerText === "") { // vérifie si le timer travail n'affiche encore rien
+  if (document.getElementById("timer").innerText === "") { // vérifie si le timer travail est vide
     document.getElementById("timer").innerText = "25:00"; // affiche la valeur initiale du timer travail
   } // fin du if
 
-  if (document.getElementById("speechTimer").innerText === "") { // vérifie si le timer parole n'affiche encore rien
+  if (document.getElementById("speechTimer").innerText === "") { // vérifie si le timer parole est vide
     document.getElementById("speechTimer").innerText = "5:00"; // affiche la valeur initiale du timer parole
   } // fin du if
 } // fin de la fonction updateUI
@@ -83,6 +85,11 @@ function getModeLabel(mode) { // retourne un nom lisible pour un mode technique
   return "Aucun"; // retourne Aucun si rien ne correspond
 } // fin de la fonction getModeLabel
 
+function clearMessages() { // remet à vide les messages visibles dans l'app
+  state.statusMessage = ""; // vide le message affiché sur l'accueil
+  state.wakeModeMessage = ""; // vide le message affiché dans le mode réveil
+} // fin de la fonction clearMessages
+
 function setCurrentTaskFromActiveMode() { // met à jour la zone MAINTENANT en fonction du vrai mode actif
   if (state.activeMode === "wake") { // vérifie si le mode actif est réveil
     state.nowTask = "Mode actif : Réveil"; // met à jour la tâche actuelle avec le mode réveil
@@ -104,7 +111,7 @@ function setCurrentTaskFromActiveMode() { // met à jour la zone MAINTENANT en f
 
 function showMode(mode) { // ouvre un mode si aucun autre mode n'est déjà actif
   if (state.activeMode !== "none" && state.activeMode !== mode) { // vérifie si un autre mode est déjà actif
-    state.statusMessage = "Un mode est déjà en cours : " + getModeLabel(state.activeMode); // affiche un message de blocage simple
+    state.statusMessage = "Un mode est déjà en cours : " + getModeLabel(state.activeMode); // affiche un message de blocage sur l'accueil
     setCurrentTaskFromActiveMode(); // remet la zone MAINTENANT en cohérence avec le vrai mode actif
     save(); // sauvegarde l'état mis à jour
     updateUI(); // rafraîchit l'affichage
@@ -114,7 +121,7 @@ function showMode(mode) { // ouvre un mode si aucun autre mode n'est déjà acti
   } // fin du if de blocage
 
   state.activeMode = mode; // définit le mode demandé comme mode actif
-  state.statusMessage = ""; // efface tout ancien message de blocage ou d'information
+  clearMessages(); // efface les anciens messages
   setCurrentTaskFromActiveMode(); // met à jour MAINTENANT pour refléter le vrai mode actif
   save(); // sauvegarde le nouvel état
   updateUI(); // rafraîchit l'affichage
@@ -138,33 +145,38 @@ function saveWakeProgress() { // sauvegarde les cases cochées du mode réveil
 } // fin de la fonction saveWakeProgress
 
 function saveWakeMusicLink() { // sauvegarde le lien musique du mode réveil
-  let input = document.getElementById("wakeMusicLinkInput").value.trim(); // récupère le texte saisi et enlève les espaces inutiles au début et à la fin
+  let input = document.getElementById("wakeMusicLinkInput").value.trim(); // récupère le texte saisi et enlève les espaces inutiles
   state.wakeMusicLink = input; // enregistre ce lien dans l'état global
-  state.statusMessage = input ? "Lien musique enregistré." : "Lien musique vide enregistré."; // affiche un petit message de confirmation adapté
+  state.wakeModeMessage = input ? "Lien musique enregistré." : "Lien musique vide enregistré."; // affiche un message visible directement dans le mode réveil
   save(); // sauvegarde l'état dans le navigateur
   updateUI(); // met à jour l'interface
 } // fin de la fonction saveWakeMusicLink
 
 function openWakeMusicLink() { // ouvre le lien musique du mode réveil
-  if (!state.wakeMusicLink) { // vérifie si aucun lien n'a encore été enregistré
-    state.statusMessage = "Ajoute d’abord un lien musique."; // affiche un message simple si le champ est vide
+  if (!state.wakeMusicLink) { // vérifie si aucun lien n'a été enregistré
+    state.wakeModeMessage = "Ajoute d’abord un lien musique."; // affiche un message visible dans le mode réveil
     save(); // sauvegarde le message
     updateUI(); // met à jour l'interface
     return; // quitte la fonction sans rien ouvrir
   } // fin du if de contrôle
 
-  window.open(state.wakeMusicLink, "_blank"); // ouvre le lien dans un nouvel onglet ou dans l'application associée du téléphone
-  state.statusMessage = "Ouverture de la musique..."; // affiche un petit message de confirmation
+  state.wakeModeMessage = "Ouverture de la musique..."; // affiche un message visible avant l'ouverture
   save(); // sauvegarde le message
   updateUI(); // met à jour l'interface
+  window.location.href = state.wakeMusicLink; // ouvre le lien dans le navigateur courant pour plus de fiabilité
 } // fin de la fonction openWakeMusicLink
+
+function resetWakeModeState() { // remet à zéro tout ce qui concerne le mode réveil
+  state.wakeProgress = { awake: false, up: false, water: false, music: false }; // décoche les cases du réveil
+  state.wakeModeMessage = ""; // efface le message spécifique au réveil
+} // fin de la fonction resetWakeModeState
 
 function completeWakeMode() { // termine le mode réveil seulement si toutes les cases sont cochées
   saveWakeProgress(); // commence par sauvegarder les dernières cases cochées
   let allChecked = state.wakeProgress.awake && state.wakeProgress.up && state.wakeProgress.water && state.wakeProgress.music; // vérifie si les 4 cases sont cochées
 
   if (!allChecked) { // vérifie si tout n'est pas encore terminé
-    state.statusMessage = "Coche toutes les étapes du réveil avant de terminer."; // affiche un message explicite
+    state.wakeModeMessage = "Coche toutes les étapes du réveil avant de terminer."; // affiche un message visible directement dans le mode réveil
     save(); // sauvegarde le message
     updateUI(); // met l'écran à jour
     return; // quitte la fonction sans terminer le mode
@@ -172,8 +184,8 @@ function completeWakeMode() { // termine le mode réveil seulement si toutes les
 
   state.activeMode = "none"; // retire le mode actif
   state.nowTask = "Aucune tâche en cours"; // remet MAINTENANT à une valeur neutre
-  state.statusMessage = "Mode Réveil terminé."; // affiche un petit message de confirmation
-  state.wakeProgress = { awake: false, up: false, water: false, music: false }; // réinitialise les cases du réveil pour la prochaine utilisation
+  state.statusMessage = "Mode Réveil terminé."; // affiche un message de confirmation sur l'accueil
+  resetWakeModeState(); // remet à zéro l'état du mode réveil
   save(); // sauvegarde l'état final
   updateUI(); // met l'interface à jour
   hideAllScreens(); // cache tous les écrans
@@ -193,7 +205,7 @@ function startTimer() { // démarre le timer du mode travail
   } // fin du if
 
   state.workCompleted = false; // indique qu'une nouvelle session travail est en cours
-  state.statusMessage = ""; // efface les anciens messages
+  clearMessages(); // efface les anciens messages
   save(); // sauvegarde l'état
   updateUI(); // met à jour l'interface
 
@@ -273,7 +285,7 @@ function startSpeech() { // démarre le timer du mode parole
   } // fin du if
 
   state.speechCompleted = false; // indique qu'une nouvelle session parole commence
-  state.statusMessage = ""; // efface les anciens messages
+  clearMessages(); // efface les anciens messages
   save(); // sauvegarde l'état
   updateUI(); // met à jour l'interface
 
@@ -333,5 +345,35 @@ function completeSpeechMode() { // termine le mode parole seulement si la sessio
   hideAllScreens(); // cache tous les écrans
   document.getElementById("home").classList.remove("hidden"); // revient à l'accueil
 } // fin de la fonction completeSpeechMode
+
+function cancelActiveMode() { // annule le mode actif en cours pour revenir à un état neutre
+  if (state.activeMode === "wake") { // vérifie si le mode actif est réveil
+    resetWakeModeState(); // remet à zéro les cases et messages du mode réveil
+  } // fin du if wake
+
+  if (state.activeMode === "work") { // vérifie si le mode actif est travail
+    clearInterval(workInterval); // arrête le timer travail si nécessaire
+    workInterval = null; // vide la référence du timer travail
+    workTime = 1500; // remet le temps de travail à 25 minutes
+    state.workCompleted = false; // remet l'état de complétion à faux
+    document.getElementById("timer").innerText = "25:00"; // remet l'affichage du timer travail à zéro
+  } // fin du if work
+
+  if (state.activeMode === "speech") { // vérifie si le mode actif est parole
+    clearInterval(speechInterval); // arrête le timer parole si nécessaire
+    speechInterval = null; // vide la référence du timer parole
+    speechTime = 300; // remet le temps de parole à 5 minutes
+    state.speechCompleted = false; // remet l'état de complétion à faux
+    document.getElementById("speechTimer").innerText = "5:00"; // remet l'affichage du timer parole à zéro
+  } // fin du if speech
+
+  state.activeMode = "none"; // retire le mode actif
+  state.nowTask = "Aucune tâche en cours"; // remet MAINTENANT à neutre
+  state.statusMessage = "Mode annulé."; // affiche un message de confirmation sur l'accueil
+  save(); // sauvegarde l'état final
+  updateUI(); // met à jour l'interface
+  hideAllScreens(); // cache tous les écrans
+  document.getElementById("home").classList.remove("hidden"); // revient à l'accueil
+} // fin de la fonction cancelActiveMode
 
 load(); // lance le chargement initial de l'application au démarrage
