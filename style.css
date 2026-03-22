@@ -171,3 +171,15 @@ br { /* cible les sauts de ligne HTML */
     font-size: 1.15rem; /* ajuste légèrement la taille du texte des boutons */
   } /* fin de la règle button desktop */
 } /* fin de la media query */
+
+button:disabled { /* cible les boutons désactivés */
+  background: #bdbdbd; /* met un gris visuel pour montrer qu'ils sont inactifs */
+  color: #ffffff; /* garde un texte lisible */
+  cursor: not-allowed; /* montre que le bouton n'est pas cliquable sur ordinateur */
+  opacity: 0.75; /* réduit légèrement l'intensité visuelle */
+  transform: none; /* empêche l'effet de pression */
+} /* fin de la règle button:disabled */
+
+button:disabled:hover { /* cible les boutons désactivés au survol */
+  opacity: 0.75; /* empêche l'effet hover normal */
+} /* fin de la règle button:disabled:hover */
