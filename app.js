@@ -60,7 +60,22 @@ function updateUI() { // met à jour tous les éléments visibles de l'interface
   if (document.getElementById("speechTimer").innerText === "") { // vérifie si le timer parole est vide
     document.getElementById("speechTimer").innerText = "5:00"; // affiche la valeur initiale du timer parole
   } // fin du if
+  updateModeButtons(); // met à jour l'état visuel des boutons de modes sur l'accueil
 } // fin de la fonction updateUI
+
+function updateModeButtons() { // met à jour l'état disabled des boutons de modes sur l'accueil
+  let wakeButton = document.getElementById("homeWakeButton"); // récupère le bouton Réveil de l'accueil
+  let workButton = document.getElementById("homeWorkButton"); // récupère le bouton Travail de l'accueil
+  let speechButton = document.getElementById("homeSpeechButton"); // récupère le bouton Parole de l'accueil
+
+  if (!wakeButton || !workButton || !speechButton) { // vérifie que les 3 boutons existent bien dans le HTML
+    return; // quitte la fonction si un bouton manque
+  } // fin du if
+
+  wakeButton.disabled = state.activeMode !== "none" && state.activeMode !== "wake"; // désactive Réveil si un autre mode est actif
+  workButton.disabled = state.activeMode !== "none" && state.activeMode !== "work"; // désactive Travail si un autre mode est actif
+  speechButton.disabled = state.activeMode !== "none" && state.activeMode !== "speech"; // désactive Parole si un autre mode est actif
+} // fin de la fonction
 
 function hideAllScreens() { // cache tous les écrans de l'application
   document.getElementById("home").classList.add("hidden"); // cache l'accueil
