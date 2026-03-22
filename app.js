@@ -4,6 +4,7 @@ let state = { // objet principal qui stocke l'état global de l'application
   statusMessage: "", // petit message d'information affiché sous MAINTENANT
   workTask: "Faire 1 tâche simple", // tâche affichée dans le mode travail
   speechIndex: 0, // index du texte actuel dans le tableau des textes parole
+  wakeMusicLink: "", // lien musique personnalisé pour le mode réveil, stocké localement dans le navigateur
   wakeProgress: { // sous-objet qui stocke l'état des cases du mode réveil
     awake: false, // case "Je suis réveillée"
     up: false, // case "Je me suis levée"
@@ -48,6 +49,7 @@ function updateUI() { // met à jour tous les éléments visibles de l'interface
   document.getElementById("wakeUp").checked = state.wakeProgress.up; // coche ou décoche la case 2 du réveil selon l'état sauvegardé
   document.getElementById("wakeWater").checked = state.wakeProgress.water; // coche ou décoche la case 3 du réveil selon l'état sauvegardé
   document.getElementById("wakeMusic").checked = state.wakeProgress.music; // coche ou décoche la case 4 du réveil selon l'état sauvegardé
+  document.getElementById("wakeMusicLinkInput").value = state.wakeMusicLink; // affiche dans le champ le lien musique actuellement sauvegardé
 
   if (document.getElementById("timer").innerText === "") { // vérifie si le timer travail n'affiche encore rien
     document.getElementById("timer").innerText = "25:00"; // affiche la valeur initiale du timer travail
@@ -134,6 +136,28 @@ function saveWakeProgress() { // sauvegarde les cases cochées du mode réveil
   state.wakeProgress.music = document.getElementById("wakeMusic").checked; // lit la valeur de la case "Musique"
   save(); // sauvegarde l'état mis à jour
 } // fin de la fonction saveWakeProgress
+
+function saveWakeMusicLink() { // sauvegarde le lien musique du mode réveil
+  let input = document.getElementById("wakeMusicLinkInput").value.trim(); // récupère le texte saisi et enlève les espaces inutiles au début et à la fin
+  state.wakeMusicLink = input; // enregistre ce lien dans l'état global
+  state.statusMessage = input ? "Lien musique enregistré." : "Lien musique vide enregistré."; // affiche un petit message de confirmation adapté
+  save(); // sauvegarde l'état dans le navigateur
+  updateUI(); // met à jour l'interface
+} // fin de la fonction saveWakeMusicLink
+
+function openWakeMusicLink() { // ouvre le lien musique du mode réveil
+  if (!state.wakeMusicLink) { // vérifie si aucun lien n'a encore été enregistré
+    state.statusMessage = "Ajoute d’abord un lien musique."; // affiche un message simple si le champ est vide
+    save(); // sauvegarde le message
+    updateUI(); // met à jour l'interface
+    return; // quitte la fonction sans rien ouvrir
+  } // fin du if de contrôle
+
+  window.open(state.wakeMusicLink, "_blank"); // ouvre le lien dans un nouvel onglet ou dans l'application associée du téléphone
+  state.statusMessage = "Ouverture de la musique..."; // affiche un petit message de confirmation
+  save(); // sauvegarde le message
+  updateUI(); // met à jour l'interface
+} // fin de la fonction openWakeMusicLink
 
 function completeWakeMode() { // termine le mode réveil seulement si toutes les cases sont cochées
   saveWakeProgress(); // commence par sauvegarder les dernières cases cochées
