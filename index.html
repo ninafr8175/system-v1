@@ -17,9 +17,9 @@
       <p id="statusMessage"></p> <!-- zone où JavaScript affichera un message court d'information ou de blocage -->
 
       <h2>MODES</h2> <!-- titre de la section contenant les boutons des modes -->
-      <button onclick="showMode('wake')">Réveil</button> <!-- bouton qui tente d'ouvrir le mode réveil -->
-      <button onclick="showMode('work')">Travail</button> <!-- bouton qui tente d'ouvrir le mode travail -->
-      <button onclick="showMode('speech')">Parole</button> <!-- bouton qui tente d'ouvrir le mode parole -->
+      <button id="homeWakeButton" onclick="showMode('wake')">Réveil</button> <!-- bouton qui tente d'ouvrir le mode réveil -->
+      <button id="homeWorkButton" onclick="showMode('work')">Travail</button> <!-- bouton qui tente d'ouvrir le mode travail -->
+      <button id="homeSpeechButton" onclick="showMode('speech')">Parole</button> <!-- bouton qui tente d'ouvrir le mode parole -->
     </div> <!-- ferme l'écran d'accueil -->
 
     <div id="wake" class="hidden"> <!-- écran réveil caché au départ -->
