@@ -1,5 +1,5 @@
 * { /* sélectionne tous les éléments de la page */
-  box-sizing: border-box; /* fait en sorte que padding et border soient inclus dans la largeur/hauteur */
+  box-sizing: border-box; /* inclut padding et bordure dans la largeur et la hauteur */
 } /* fin de la règle universelle */
 
 body { /* cible tout le corps visible de la page */
@@ -41,23 +41,50 @@ h2 { /* cible les sous-titres des écrans */
   background: #ffffff; /* met un fond blanc pour faire une vraie carte */
   border-radius: 20px; /* arrondit les coins pour un aspect plus moderne */
   padding: 24px 18px; /* ajoute un bon espace intérieur */
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); /* ajoute une ombre légère pour détacher la carte du fond */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); /* ajoute une ombre légère */
 } /* fin de la règle des écrans */
 
 p { /* cible tous les paragraphes */
   text-align: center; /* centre le texte */
-  font-size: 1.25rem; /* augmente la taille pour que ce soit lisible sur téléphone */
+  font-size: 1.25rem; /* augmente la taille pour une bonne lisibilité */
   line-height: 1.5; /* améliore la lisibilité verticale */
   margin: 12px 0 20px 0; /* ajoute des espacements autour */
   word-break: break-word; /* coupe les mots trop longs si nécessaire */
 } /* fin de la règle p */
 
+#nowTask,
+#workTask,
+#speechText,
+#statusMessage,
+#wakeModeMessage,
+#wakeMusicLinkLabel { /* cible les zones de texte importantes */
+  background: #f8f8f8; /* ajoute un fond gris clair pour mieux distinguer la zone */
+  border-radius: 14px; /* arrondit la zone */
+  padding: 16px; /* ajoute de l’espace intérieur */
+} /* fin de la règle des textes importants */
+
+#statusMessage,
+#wakeModeMessage { /* cible les messages d'information */
+  font-size: 1rem; /* réduit légèrement la taille pour différencier du contenu principal */
+  min-height: 56px; /* réserve une hauteur minimale pour éviter les sauts visuels */
+  display: flex; /* active Flexbox pour centrer le texte verticalement */
+  align-items: center; /* centre verticalement le texte */
+  justify-content: center; /* centre horizontalement le texte */
+} /* fin de la règle des messages */
+
+#wakeMusicLinkLabel { /* cible spécifiquement le petit titre du lien musique */
+  font-size: 1.1rem; /* ajuste sa taille */
+  font-weight: 600; /* le rend un peu plus visible */
+  margin-top: 8px; /* ajoute un petit espace au-dessus */
+  margin-bottom: 12px; /* ajoute un petit espace en dessous */
+} /* fin de la règle wakeMusicLinkLabel */
+
 button { /* cible tous les boutons */
   display: block; /* force le bouton à être sur sa propre ligne */
   width: 100%; /* rend le bouton large et facile à toucher */
-  min-height: 56px; /* garantit une bonne hauteur tactile pour le doigt */
+  min-height: 56px; /* garantit une bonne hauteur tactile */
   margin: 12px 0; /* ajoute de l’espace entre les boutons */
-  padding: 14px 16px; /* ajoute du confort visuel à l’intérieur du bouton */
+  padding: 14px 16px; /* ajoute du confort visuel à l’intérieur */
   font-size: 1.2rem; /* augmente le texte des boutons */
   font-weight: 600; /* rend le texte légèrement gras */
   border: none; /* enlève la bordure par défaut */
@@ -91,6 +118,25 @@ input[type="checkbox"] { /* cible les cases à cocher */
   flex-shrink: 0; /* empêche la case de rétrécir */
 } /* fin de la règle checkbox */
 
+input[type="url"] { /* cible le champ de lien musique */
+  display: block; /* force le champ à être sur sa propre ligne */
+  width: 100%; /* prend toute la largeur disponible comme les boutons */
+  min-height: 56px; /* garantit une bonne hauteur tactile */
+  margin: 12px 0 16px 0; /* ajoute de l’espace autour du champ */
+  padding: 14px 16px; /* ajoute de l’espace intérieur */
+  font-size: 1rem; /* règle une taille lisible pour le texte saisi */
+  font-family: Arial, sans-serif; /* garde la même police que le reste */
+  color: #111; /* rend le texte bien lisible */
+  background: #fff; /* met un fond blanc */
+  border: 2px solid #ddd; /* ajoute une bordure légère */
+  border-radius: 14px; /* arrondit les coins du champ */
+  outline: none; /* enlève le contour par défaut du navigateur */
+} /* fin de la règle input url */
+
+input[type="url"]:focus { /* cible le champ quand il est sélectionné */
+  border-color: #111; /* fonce la bordure pour montrer le focus */
+} /* fin de la règle input url focus */
+
 .hidden { /* cible les éléments qui doivent être cachés */
   display: none; /* cache complètement l’élément */
 } /* fin de la règle hidden */
@@ -104,16 +150,8 @@ input[type="checkbox"] { /* cible les cases à cocher */
   min-height: 48px; /* réserve de la place même quand le texte n’est pas encore affiché */
 } /* fin de la règle des timers */
 
-#nowTask,
-#workTask,
-#speechText { /* cible les textes dynamiques principaux */
-  background: #f8f8f8; /* ajoute un fond gris clair pour mieux distinguer la zone */
-  border-radius: 14px; /* arrondit la zone */
-  padding: 16px; /* ajoute de l’espace intérieur */
-} /* fin de la règle des textes dynamiques */
-
 br { /* cible les sauts de ligne HTML */
-  display: none; /* masque les <br> pour éviter des espacements bizarres avec le layout mobile */
+  display: none; /* masque les <br> pour éviter des espacements bizarres */
 } /* fin de la règle br */
 
 @media (min-width: 768px) { /* applique des styles spéciaux sur tablette ou ordinateur */
