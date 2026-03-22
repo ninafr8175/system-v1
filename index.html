@@ -1,6 +1,6 @@
 <!DOCTYPE html> <!-- indique au navigateur qu'on utilise HTML5 -->
-<html lang="fr"> <!-- ouvre le document HTML et précise que la langue principale est le français -->
-<head> <!-- ouvre la partie de configuration invisible de la page -->
+<html lang="fr"> <!-- ouvre le document HTML et précise la langue principale -->
+<head> <!-- ouvre la partie de configuration invisible -->
   <meta charset="UTF-8"> <!-- permet d'afficher correctement les accents et caractères spéciaux -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- adapte la page aux écrans de téléphone -->
   <title>Mon Système</title> <!-- définit le titre affiché dans l'onglet du navigateur -->
@@ -32,10 +32,12 @@
 
       <p id="wakeMusicLinkLabel">Lien musique réveil</p> <!-- petit titre pour la zone de lien musique -->
       <input id="wakeMusicLinkInput" type="url" placeholder="Colle ici un lien YouTube ou Spotify"> <!-- champ dans lequel tu colles ton lien musique -->
-      <button onclick="saveWakeMusicLink()">Enregistrer le lien</button> <!-- bouton qui sauvegarde le lien musique dans le navigateur -->
+      <p id="wakeModeMessage"></p> <!-- message visible directement dans le mode réveil -->
+      <button onclick="saveWakeMusicLink()">Enregistrer le lien</button> <!-- bouton qui sauvegarde le lien musique -->
       <button onclick="openWakeMusicLink()">Ouvrir ma musique</button> <!-- bouton qui ouvre le lien musique enregistré -->
 
       <button onclick="completeWakeMode()">Terminer le mode</button> <!-- bouton qui termine le mode réveil si toutes les cases sont cochées -->
+      <button onclick="cancelActiveMode()">Annuler le mode</button> <!-- bouton qui annule le mode en cours et revient à un état neutre -->
       <button onclick="goHome()">Retour</button> <!-- bouton qui revient à l'accueil sans terminer le mode -->
     </div> <!-- ferme l'écran réveil -->
 
@@ -49,6 +51,7 @@
       <p id="timer"></p> <!-- zone où JavaScript affichera le temps restant du mode travail -->
 
       <button onclick="completeWorkMode()">Terminer le mode</button> <!-- bouton qui termine le mode travail -->
+      <button onclick="cancelActiveMode()">Annuler le mode</button> <!-- bouton qui annule le mode en cours -->
       <button onclick="goHome()">Retour</button> <!-- bouton qui revient à l'accueil sans terminer le mode -->
     </div> <!-- ferme l'écran travail -->
 
@@ -63,10 +66,11 @@
       <p id="speechTimer"></p> <!-- zone où JavaScript affichera le temps restant du mode parole -->
 
       <button onclick="completeSpeechMode()">Terminer le mode</button> <!-- bouton qui termine le mode parole -->
+      <button onclick="cancelActiveMode()">Annuler le mode</button> <!-- bouton qui annule le mode en cours -->
       <button onclick="goHome()">Retour</button> <!-- bouton qui revient à l'accueil sans terminer le mode -->
     </div> <!-- ferme l'écran parole -->
   </div> <!-- ferme le conteneur principal -->
 
-  <script src="app.js"></script> <!-- charge le fichier JavaScript à la fin pour que le HTML existe déjà -->
+  <script src="app.js"></script> <!-- charge le fichier JavaScript à la fin -->
 </body> <!-- ferme la partie visible -->
 </html> <!-- ferme le document HTML -->
